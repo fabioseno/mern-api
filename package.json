@@ -1,0 +1,28 @@
+{
+  "name": "mern-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabioseno/mern-api.git"
+  },
+  "author": "Fábio Akira Yoshida <fabioseno@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fabioseno/mern-api/issues"
+  },
+  "homepage": "https://github.com/fabioseno/mern-api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.2.1"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
