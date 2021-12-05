@@ -4,24 +4,15 @@ module.exports = (context) => {
 
     const list = async (fromUser, filter) => {
         let criteria = {};
+        let userField;
 
         if (filter.type === 'received') {
+            userField = 'toId';
             criteria.toId = db.toObjectId(fromUser);
         } else if (filter.type === 'sent') {
+            userField = 'fromId';
             criteria.fromId = db.toObjectId(fromUser);
         }
-
-        // return db.getConnection()
-        //     .collection('gifts')
-        //     .find(criteria)
-        //     //.project({ createdAt: 0 })
-        //     .sort({ createdAt: 1 })
-        //     .toArray()
-        //     .then(rows => rows.map(item => {
-        //         item._id = item._id.toString();
-
-        //         return item;
-        //     }));
 
         return db.getConnection()
             .collection('gifts')
@@ -35,26 +26,26 @@ module.exports = (context) => {
                         as: 'giftType'
                     }
                 },
+                // {
+                //     $lookup: {
+                //         from: 'users',
+                //         localField: 'fromId',
+                //         foreignField: '_id',
+                //         as: 'fromUser'
+                //     }
+                // },
                 {
                     $lookup: {
                         from: 'users',
-                        localField: 'fromId',
+                        localField: userField,
                         foreignField: '_id',
-                        as: 'fromUser'
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'toId',
-                        foreignField: '_id',
-                        as: 'toUser'
+                        as: 'user'
                     }
                 },
 
                 { $unwind: { path: '$giftType' } },
-                { $unwind: { path: '$fromUser' } },
-                { $unwind: { path: '$toUser' } },
+                // { $unwind: { path: '$fromUser' } },
+                { $unwind: { path: '$user' } },
                 {
                     $project: {
                         _id: 1,
@@ -62,10 +53,8 @@ module.exports = (context) => {
                         createdAt: 1,
                         'giftType.name': 1,
                         'giftType.icon': 1,
-                        'fromUser._id': 1,
-                        'fromUser.name': 1,
-                        'toUser._id': 1,
-                        'toUser.name': 1
+                        'user._id': 1,
+                        'user.name': 1
                     }
                 }
             ])

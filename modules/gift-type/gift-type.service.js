@@ -8,12 +8,7 @@ module.exports = (context) => {
             .find()
             .project({ createdAt: 0 })
             .sort({ name: 1 })
-            .toArray()
-            .then(rows => rows.map(item => {
-                item._id = item._id.toString();
-
-                return item;
-            }));
+            .toArray();
     };
 
     const add = (data) => {

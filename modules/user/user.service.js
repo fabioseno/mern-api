@@ -8,12 +8,7 @@ module.exports = (context) => {
             .find()
             .project({ passcode: 0, createdAt: 0 })
             .sort({ name: 1 })
-            .toArray()
-            .then(rows => rows.map(item => {
-                item._id = item._id.toString();
-
-                return item;
-            }));
+            .toArray();
     };
 
     const add = (data) => {
@@ -22,7 +17,8 @@ module.exports = (context) => {
 
         return db.getConnection()
             .collection('users')
-            .insertOne(data);
+            .insertOne(data)
+            .then(() => ({ passcode: data.passcode }));
     };
 
     const login = (email, passcode) => {
@@ -30,14 +26,7 @@ module.exports = (context) => {
             .collection('users')
             .findOne({ email, passcode }, {
                 projection: { passcode: 0, createdAt: 0 }
-            })
-            .then(result => {
-                if (result) {
-                    result._id = result._id.toString();
-                }
-
-                return result;
-            })
+            });
     };
 
     const generateRandomPasscode = (min, max) => {
